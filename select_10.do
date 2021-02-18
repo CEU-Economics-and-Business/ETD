@@ -25,7 +25,7 @@ tab program_sampling
 export delimited using "/home/zavecz/etd/ETD/output/all.csv", replace
 
 set seed 123
-sample 7, by(program_sampling)
+sample 10, by(program_sampling)
 tab program_sampling 
 
 *save "output/sample", replace
