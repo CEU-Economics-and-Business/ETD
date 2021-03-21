@@ -22,11 +22,11 @@ foreach val in "MESPOM" "MSc" {
 tab program_sampling
 
 *save "output/all", replace
-export delimited using "/home/zavecz/etd/ETD/output/all.csv", replace
+export delimited using "output/all.csv", replace
 
 set seed 123
 sample 10, by(program_sampling)
 tab program_sampling 
 
 *save "output/sample", replace
-export delimited using "/home/zavecz/etd/ETD/output/sample.csv", replace
+export delimited using "output/sample.csv", replace
