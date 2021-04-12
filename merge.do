@@ -73,4 +73,21 @@ tab ra_analysis_exist
 tab ra_analysis_subject
 tab ra_analysis_type
 
+tab ra_coercion_risk
+
+label define values 0 "No" 1 "Yes" 2 "Can not be decided" 3 "NA" 
+foreach var of varlist ra_analysis_exist ra_risk_subject - ra_future {
+	*egen `var'__num = group(`var')
+	gen `var'_num = ""
+	replace `var'_num = "0" if `var' == "No"
+	replace `var'_num = "1" if `var' == "Yes"
+	replace `var'_num = "2" if `var' == "Can not be decided"
+	replace `var'_num = "3" if `var' == "NA"
+	destring `var'_num, replace
+	label values `var'_num values
+	drop `var'
+}
+
+tab ra_coercion_risk_num
+
 save "output/analysis_sample", replace
