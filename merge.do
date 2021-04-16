@@ -22,31 +22,15 @@ rename filenameofthethesisdissertationf folder_name
 append using `pilot'
 
 preserve
-import delimited "output/thesis_gaurav.csv", varnames(1) clear
-replace folder_name = strrtrim(folder_name)
-tempfile gaurav
-save `gaurav'
-restore
-
-preserve
-import delimited "output/thesis_mirko.csv", varnames(1) clear
-replace folder_name = strrtrim(folder_name)
-tempfile mirko
-save `mirko'
-restore
-
-preserve
-import delimited "output/sample.csv", clear
+import delimited "output/all.csv", clear
 gen slash = strrpos(pdf_link,"/")
 gen folder_name = strrtrim(substr(pdf_link,(slash+1),.))
 drop slash pdf_link
-tempfile sample
-save `sample'
+tempfile all
+save `all'
 restore
 
-merge 1:1 folder_name using `gaurav', gen(merge_gaurav)
-merge 1:1 folder_name using `mirko', gen(merge_mirko)
-merge 1:1 folder_name using `sample', gen(merge_pilot) keep(1 3)
+merge 1:1 folder_name using `all', gen(merge_all) keep(1 3)
 sort folder_name
 
 rename wasthereanyanalysisintheprojectb ra_analysis_exist
@@ -66,8 +50,7 @@ rename weredataprotectionandstoragerequ ra_protection
 rename werethereanyplansforfutureuseoft ra_future
 rename pleaselistanycommentsyouhaveabou ra_comment
 
-tab merge_gaurav merge_mirko
-tab merge_pilot
+tab merge_all
 
 tab ra_analysis_exist
 tab ra_analysis_subject
