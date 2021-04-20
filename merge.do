@@ -73,4 +73,32 @@ foreach var of varlist ra_analysis_exist ra_risk_subject - ra_future {
 
 tab ra_coercion_risk_num
 
+preserve
+import delimited "/home/zavecz/etd/ETD/output/final.csv", encoding(UTF-8) clear
+contract program
+rename _freq freq_final
+tempfile weight_final
+save `weight_final'
+restore
+
+preserve
+import delimited "/home/zavecz/etd/ETD/output/all.csv", encoding(UTF-8) clear
+contract program
+rename _freq freq_all
+tempfile weight_all
+save `weight_all'
+restore
+
+preserve
+use `weight_final', clear
+merge 1:1 program using `weight_all', nogen
+egen sum_final = sum(freq_final)
+egen sum_all = sum(freq_all)
+gen weight = (freq_final * sum_all) / (freq_all * sum_final)
+tempfile weight_both
+save `weight_both'
+restore
+
+merge m:1 program using `weight_both', keep (1 3) nogen keepusing(weight)
+
 save "output/analysis_sample", replace
