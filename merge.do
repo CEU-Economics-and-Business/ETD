@@ -73,6 +73,11 @@ foreach var of varlist ra_analysis_exist ra_risk_subject - ra_future {
 
 tab ra_coercion_risk_num
 
+foreach var in department program {
+	egen `var'_num = group(`var')
+	labmask `var'_num, val(`var')
+}
+
 preserve
 import delimited "/home/zavecz/etd/ETD/output/final.csv", encoding(UTF-8) clear
 contract program
