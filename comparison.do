@@ -1,3 +1,4 @@
+capture ssc install coefplot
 use "output/analysis_sample", clear
 
 foreach var of varlist ra_analysis_exist_num-ra_future_num{
