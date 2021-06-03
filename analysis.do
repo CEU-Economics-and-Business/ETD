@@ -45,12 +45,20 @@ labmask question, val(question_text)
 *catplot ra_ question, ytitle("Percent of Respondents") asyvars stack var2opts(sort(1) descending)
 *graph export "output/graphs_both.png", replace
 
-splitvallabels question if text_ == "ra_coercion_risk_num" | text_ == "ra_consent_num" | text_ == "ra_deception_num" | text_ == "ra_experiment_num" | text_ == "ra_incompetent_num" | text_ == "ra_risk_researcher_num" | text_ == "ra_risk_subject_num", recode
-catplot ra_ question [fw=weight] if text_ == "ra_coercion_risk_num" | text_ == "ra_consent_num" | text_ == "ra_deception_num" | text_ == "ra_experiment_num" | text_ == "ra_incompetent_num" | text_ == "ra_risk_researcher_num" | text_ == "ra_risk_subject_num", fraction(question) var2opts(sort(2) descending label(labsize(small)) gap(*0.5) relabel(`r(relabel)')) ytitle("Fraction of Respondents" "N = 51", size(small)) asyvars stack graphregion(color(white)) legend(size(small)) xsize(2.5) note("Note: Only asked from those who did some original analysis." "Option NA was added after pilot coding." "Questions are truncated in some cases." "Questions are sorted by the fraction of the yes answers." "Unweighted.", size(vsmall))
+local if text_ == "ra_coercion_risk_num" | text_ == "ra_consent_num" | text_ == "ra_deception_num" | text_ == "ra_experiment_num" | text_ == "ra_incompetent_num" | text_ == "ra_risk_researcher_num" | text_ == "ra_risk_subject_num"
+summarize weight if text_ == "ra_coercion_risk_num" & !missing(ra_)
+local n = r(N)
+local N = r(sum)
+splitvallabels question if `if', recode
+catplot ra_ question [fw=weight] if `if', fraction(question) var2opts(sort(2) descending label(labsize(small)) gap(*0.5) relabel(`r(relabel)')) ytitle("Fraction of Respondents" "n = `n', N = `N'", size(small)) asyvars stack graphregion(color(white)) legend(size(small)) xsize(2.5) note("Note: Only asked from those who did some original analysis." "Option NA was added after pilot coding." "Questions are truncated in some cases." "Questions are sorted by the fraction of the yes answers." "Unweighted.", size(vsmall))
 graph export "output/graphs_original.pdf", replace
 *restore
 
-splitvallabels question if text_ == "ra_anonymity_num" | text_ == "ra_future_num" | text_ == "ra_protection_num" | text_ == "ra_sensitive_num" | text_ == "ra_tracking_num", recode
-catplot ra_ question  [fw=weight] if text_ == "ra_anonymity_num" | text_ == "ra_future_num" | text_ == "ra_protection_num" | text_ == "ra_sensitive_num" | text_ == "ra_tracking_num", fraction(question) var2opts(sort(2) descending label(labsize(small)) gap(*0.5) relabel(`r(relabel)')) ytitle("Fraction of Respondents" "N = 80", size(small)) asyvars stack graphregion(color(white)) legend(size(small)) xsize(2.5) note("Note: Only asked from those who did some analysis (original, secondary, both)." "Option NA was added after pilot coding." "Questions are truncated in some cases." "Questions are sorted by the fraction of the yes answers." "Unweighted.", size(vsmall))
+local if text_ == "ra_anonymity_num" | text_ == "ra_future_num" | text_ == "ra_protection_num" | text_ == "ra_sensitive_num" | text_ == "ra_tracking_num"
+summarize weight if text_ == "ra_anonymity_num" & !missing(ra_)
+local n = r(N)
+local N = r(sum)
+splitvallabels question if `if', recode
+catplot ra_ question  [fw=weight] if `if', fraction(question) var2opts(sort(2) descending label(labsize(small)) gap(*0.5) relabel(`r(relabel)')) ytitle("Fraction of Respondents" "n = `n', N = `N'", size(small)) asyvars stack graphregion(color(white)) legend(size(small)) xsize(2.5) note("Note: Only asked from those who did some analysis (original, secondary, both)." "Option NA was added after pilot coding." "Questions are truncated in some cases." "Questions are sorted by the fraction of the yes answers." "Unweighted.", size(vsmall))
 graph export "output/graphs_all.pdf", replace
 *restore
