@@ -80,6 +80,8 @@ foreach var in department program {
 
 preserve
 import delimited "output/final.csv", encoding(UTF-8) clear
+generate new_year = real(regexs(0)) if(regexm(pdf_link, "[0-9][0-9][0-9][0-9]"))
+keep if new_year == 2019
 contract program
 rename _freq freq_final
 tempfile weight_final
